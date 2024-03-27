@@ -1,6 +1,9 @@
 package com.example.dictionayapplication.presentation
 
 
+import android.content.Context
+import android.media.AudioAttributes
+import android.media.MediaPlayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +27,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,6 +37,7 @@ import androidx.compose.ui.unit.sp
 fun MainBox(
     mainState: MainState
 ) {
+    val context = LocalContext.current
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -59,7 +65,11 @@ fun MainBox(
                             )
                     ) {
                         IconButton(
-                            onClick = { /*TODO()*/ }) {
+                            onClick = { if (wordItem.audioUrl.isNotEmpty()){
+                                playAudio(context,wordItem.audioUrl)
+                            }
+
+                            }) {
                             Icon(
                                 imageVector = Icons.Rounded.PlayArrow,
                                 contentDescription = "",
@@ -104,4 +114,21 @@ fun MainBox(
     }
 }
 
+fun playAudio(context: Context, audioUrl: String) {
+    if (audioUrl.isBlank()) return // Early return if the URL is blank
 
+    val mediaPlayer = MediaPlayer().apply {
+        setAudioAttributes(
+            AudioAttributes.Builder()
+                .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
+                .build()
+        )
+        // Prepend "https:" to the URL if it starts with "//"
+        val fullUrl = if (audioUrl.startsWith("//")) "https:$audioUrl" else audioUrl
+        setDataSource(fullUrl)
+        prepareAsync()
+        setOnPreparedListener { start() }
+        setOnCompletionListener { release() }
+    }
+}

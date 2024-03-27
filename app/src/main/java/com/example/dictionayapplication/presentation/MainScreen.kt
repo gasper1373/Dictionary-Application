@@ -96,6 +96,5 @@ fun MainScreen(mainState: MainState) {
         {
             MainBox(mainState)
         }
-
     }
 }
