@@ -16,32 +16,46 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = greenPrimary,
-    secondary = greenPrimaryContainer,
-    tertiary = greenTertiary
+    primary = darkPrimary,
+    secondary = darkSecondary,
+    tertiary = darkTertiary,
+    background = darkBackground,
+    surface = darkSurface,
+    onPrimary = onDarkPrimary,
+    onSecondary = onDarkSecondary,
+    onTertiary = onDarkTertiary,
+    onBackground = onDarkBackground,
+    onSurface = onDarkSurface,
+    secondaryContainer = darkSecondaryContainer,
+    error = darkError,
+    onError = onDarkError,
+    errorContainer = DarkErrorContainer,
+    onErrorContainer = onDarkErrorContainer
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
-
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+    primary = primary,
+    secondary = secondary,
+    tertiary = tertiary,
+    background = background,
+    surface = surface,
+    onPrimary = onPrimary,
+    onSecondary = onSecondary,
+    onTertiary = onTertiary,
+    onBackground = onBackground,
+    onSurface = onSurface,
+    secondaryContainer = secondaryContainer,
+    error = error,
+    onError = onError,
+    errorContainer = errorContainer,
+    onErrorContainer = onErrorContainer
 )
 
 @Composable
 fun DictionayApplicationTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @Composable () -> Unit
 ) {
     val colorScheme = when {
@@ -61,7 +75,6 @@ fun DictionayApplicationTheme(
             WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = darkTheme
         }
     }
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

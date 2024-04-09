@@ -81,7 +81,7 @@ fun Meaning(
             ) {
 
                 Text(
-                    text = stringResource(R.string.definition),
+                    text = stringResource(R.string.example),
                     fontWeight = FontWeight.SemiBold,
                     fontSize = 19.sp,
                     color = MaterialTheme.colorScheme.primary
