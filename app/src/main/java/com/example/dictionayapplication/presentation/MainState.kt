@@ -7,5 +7,6 @@ data class MainState(
     val searchWord: String = "",
     val wordItem: WordItem? = null,
     val isSearchPerformed: Boolean = false,
-    val isWordPlaying : Boolean = false
-)
+    val isWordPlaying : Boolean = false,
+    val showSnackBar : Boolean = false
+    )

@@ -29,6 +29,7 @@ class MainViewModel @Inject constructor(
             }
             MainUiEvent.onSearchClick -> {
                 searchJob?.cancel()
+                _mainState.value = _mainState.value.copy(isSearchPerformed = true)
                 searchJob = viewModelScope.launch {
                     loadWordResult()
                 }
@@ -42,7 +43,9 @@ class MainViewModel @Inject constructor(
                 mainState.value.searchWord
             ).collect { result ->
                 when (result) {
-                    is Result.Error -> Unit
+                    is Result.Error -> _mainState.update {
+                        mainState -> mainState.copy(showSnackBar = true)
+                    }
                     is Result.Loading -> {
                         _mainState.update {
                             it.copy(isLoading = result.isLoading)
@@ -59,6 +62,11 @@ class MainViewModel @Inject constructor(
                     }
                 }
             }
+        }
+    }
+    fun resetSnackbarShown(){
+        _mainState.update { mainState ->
+            mainState.copy(showSnackBar = false)
         }
     }
 }

@@ -5,6 +5,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -24,20 +25,26 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.gson.annotations.Until
 
 @Composable
 fun MainBox(
-    mainState: MainState
+    mainState: MainState,
 ) {
     val context = LocalContext.current
+    val mediaPlayer = remember { MediaPlayer() }
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
@@ -47,7 +54,7 @@ fun MainBox(
                 .padding(horizontal = 30.dp)
         ) {
             mainState.wordItem?.let { wordItem ->
-                Spacer(modifier = Modifier.height(20.dp))
+                Spacer(modifier = Modifier.height(10.dp))
                 Text(
                     text = wordItem.word,
                     fontSize = 30.sp,
@@ -55,31 +62,31 @@ fun MainBox(
                     color = MaterialTheme.colorScheme.primary
                 )
                 Spacer(modifier = Modifier.height(8.dp))
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    IconButton(
                         modifier = Modifier
-                            .padding(8.dp)
+                            .clip(CircleShape)
                             .background(
-                                MaterialTheme.colorScheme.onSecondary,
-                                shape = CircleShape
+                                color = MaterialTheme.colorScheme.secondaryContainer.copy(0.7f),
                             )
-                    ) {
-                        IconButton(
-                            onClick = { if (wordItem.audioUrl.isNotEmpty()){
-                                playAudio(context,wordItem.audioUrl)
+                            .border(width = 1.dp, color = Color.Black, shape = CircleShape),
+                        onClick = {
+                            if (wordItem.audioUrl.isNotEmpty()) {
+                                playAudio(context, wordItem.audioUrl)
                             }
-
-                            }) {
-                            Icon(
-                                imageVector = Icons.Rounded.PlayArrow,
-                                contentDescription = "",
-                                modifier = Modifier.size(24.dp)
-                            )
-                        }
+                        }) {
+                        Icon(
+                            imageVector = Icons.Rounded.PlayArrow,
+                            contentDescription = "Play",
+                            modifier = Modifier.size(24.dp)
+                        )
                     }
+                    Spacer(modifier = Modifier.padding(8.dp))
                     Text(
                         text = wordItem.phonetic,
-                        fontSize = 16.sp,
+                        fontSize = 20.sp,
                         color = MaterialTheme.colorScheme.onBackground
                     )
                 }
@@ -132,3 +139,5 @@ fun playAudio(context: Context, audioUrl: String) {
         setOnCompletionListener { release() }
     }
 }
+
+
